@@ -1,10 +1,10 @@
 import pygame
-from shot import *
+from shot import Shot
+from player import Player
 from constants import *
 from logger import *
-from player import *
-from asteroid import *
-from asteroidfield import *
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 import sys
 
 def main():
@@ -42,6 +42,12 @@ def main():
                 print("Game Over!")
                 sys.exit()
                 return
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    log_event("asteroid_shot")
+                    asteroid.kill()
+                    shot.kill()
         for sprite in drawable:
             sprite.draw(screen)
         pygame.display.flip()
