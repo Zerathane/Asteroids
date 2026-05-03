@@ -37,8 +37,7 @@ This project was primarily a learning exercise, covering:
    ```
    uv run main.py
 
-3. Developed on WSL2 — if running in a similar environment, an X server (e.g. XLaunch) is required for the display.
-   ```
+Developed on WSL2 — if running in a similar environment, an X server (e.g. XLaunch) is required for the display.
 
 ## Controls
 
