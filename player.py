@@ -8,16 +8,19 @@ class Player(CircleShape):
         self.rotation = 0
         self.shot_cooldown = 0
 
-    def triangle(self):
+    def draw(self, screen):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
         a = self.position + forward * self.radius
         b = self.position - forward * self.radius - right
+        notch = self.position - forward * (self.radius / 2)
         c = self.position - forward * self.radius + right
-        return [a, b, c]
-
-    def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), width=LINE_WIDTH)
+        pygame.draw.polygon(screen, "white", [a, b, notch, c], width=LINE_WIDTH)
+        keys = pygame.key.get_pressed()
+        line_start = notch - forward * 5
+        line_end = notch - forward * 15
+        if keys[pygame.K_w]:
+            pygame.draw.line(screen, "white", line_start, line_end, width=LINE_WIDTH)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
