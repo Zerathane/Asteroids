@@ -1,4 +1,5 @@
 from circleshape import *
+from constants import *
 
 class Shot(CircleShape):
     def __init__(self, x, y, radius):
@@ -9,3 +10,6 @@ class Shot(CircleShape):
 
     def update(self, dt):
         self.position += (self.velocity * dt)
+        self.wrap(SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    
