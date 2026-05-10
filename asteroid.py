@@ -2,6 +2,7 @@ import math
 from constants import *
 from circleshape import *
 import random
+from explosion import *
 from logger import *
 
 class Asteroid(CircleShape):
@@ -27,6 +28,7 @@ class Asteroid(CircleShape):
 
     def split(self):
         if self.radius <= ASTEROID_MIN_RADIUS:
+            Explosion(self.position.x, self.position.y, self.radius)
             self.kill()
             return
         else:
@@ -39,4 +41,6 @@ class Asteroid(CircleShape):
             asteroid2 = Asteroid(self.position.x, self.position.y, new_radius)
             asteroid1.velocity = (self.velocity * 1.3)
             asteroid2.velocity = (new_velocity * 1.3)
+            Explosion(self.position.x, self.position.y, self.radius)
             self.kill()
+            
