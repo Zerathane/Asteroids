@@ -6,6 +6,7 @@ from constants import *
 from logger import *
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from game_state import Game_State
 import sys
 
 def main():
@@ -19,6 +20,8 @@ def main():
     dt = 0
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
+    pygame.font.init()
+    font = pygame.font.SysFont(None, 36)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -28,6 +31,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     Shot.containers = (shots, updatable, drawable)
     Explosion.containers = (updatable, drawable)
+    game_state = Game_State()
     player = Player(x, y)
     asteroid_field = AsteroidField()
 
@@ -38,16 +42,23 @@ def main():
                 return
         screen.fill("black")
         updatable.update(dt)
+        score_text = font.render(f"Score: {str(game_state.score)}  Lives: {str(game_state.lives)}", True, "white")
+        screen.blit(score_text, (10, 10))
         for asteroid in asteroids:
             if player.collides_with(asteroid):
+                game_state.lose_life()
                 log_event("player_hit")
-                print("Game Over!")
-                sys.exit()
-                return
+                if game_state.is_game_over():
+                    print("Game Over!")
+                    sys.exit()
+                    return
+                else:
+                    player.reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)       
         for asteroid in asteroids:
             for shot in shots:
                 if shot.collides_with(asteroid):
                     log_event("asteroid_shot")
+                    game_state.add_score(asteroid)
                     asteroid.split()
                     shot.kill()
         for sprite in drawable:
