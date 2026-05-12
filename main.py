@@ -21,7 +21,7 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
     pygame.font.init()
-    font = pygame.font.SysFont(None, 36)
+    font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 24)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
