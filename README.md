@@ -1,6 +1,6 @@
 # 🚀 Asteroids
 
-A recreation of the classic **Asteroids** arcade game, built with Python and Pygame as part of Boot.dev's backend developer path.
+A recreation of the classic **Asteroids** arcade game, built with Python and Pygame as part of [Boot.dev's](https://www.boot.dev/about) backend developer path.
 
 ## About
 
@@ -51,5 +51,7 @@ Developed on WSL2 — if running in a similar environment, an X server (e.g. XLa
 
 ## Acknowledgements
 
-Built as part of Boot.dev's backend developer course. The original Asteroids game was developed by Atari and released in 1979.
+Built as part of [Boot.dev's](https://www.boot.dev/about) backend developer course. The original Asteroids game was developed by Atari and released in 1979.
+Font: [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) by CodeMan38, licensed under the SIL Open Font License
+
 
