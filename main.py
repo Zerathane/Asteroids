@@ -1,5 +1,6 @@
 import pygame
 from explosion import *
+from hud import Hud
 from shot import Shot
 from player import Player
 from constants import *
@@ -21,7 +22,6 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
     pygame.font.init()
-    font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 24)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -34,6 +34,7 @@ def main():
     game_state = Game_State()
     player = Player(x, y)
     asteroid_field = AsteroidField()
+    hud = Hud(game_state)
 
     while True:
         log_state()
@@ -42,8 +43,7 @@ def main():
                 return
         screen.fill("black")
         updatable.update(dt)
-        score_text = font.render(f"Score: {str(game_state.score)}  Lives: {str(game_state.lives)}", True, "white")
-        screen.blit(score_text, (10, 10))
+        hud.draw(screen)
         for asteroid in asteroids:
             if player.collides_with(asteroid):
                 game_state.lose_life()

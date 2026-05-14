@@ -9,19 +9,9 @@ class Player(CircleShape):
         self.shot_cooldown = 0
 
     def draw(self, screen):
-        forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
-        a = self.position + forward * self.radius
-        b = self.position - forward * self.radius - right
-        notch = self.position - forward * (self.radius / 2)
-        c = self.position - forward * self.radius + right
-        pygame.draw.polygon(screen, "white", [a, b, notch, c], width=LINE_WIDTH)
         keys = pygame.key.get_pressed()
-        line_start = notch - forward * 5
-        line_end = notch - forward * 15
-        if keys[pygame.K_w]:
-            pygame.draw.line(screen, "white", line_start, line_end, width=LINE_WIDTH)
-
+        draw_ship(screen, self.position, self.radius, self.rotation, "white", thrusting=keys[pygame.K_w])
+        
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
 
@@ -65,5 +55,21 @@ class Player(CircleShape):
         self.velocity = pygame.Vector2(0, 0)
         self.rotation = 0
         self.shot_cooldown = 0
+
+def draw_ship(screen, position, radius, rotation, colour, thrusting=False):
+    forward = pygame.Vector2(0, 1).rotate(rotation)
+    right = pygame.Vector2(0, 1).rotate(rotation + 90) * radius / 1.5
+    a = position + forward * radius
+    b = position - forward * radius - right
+    notch = position - forward * (radius / 2)
+    c = position - forward * radius + right
+    pygame.draw.polygon(screen, colour, [a, b, notch, c], width=LINE_WIDTH)
+    line_start = notch - forward * 5
+    line_end = notch - forward * 15
+    keys = pygame.key.get_pressed()
+    if thrusting:
+        pygame.draw.line(screen, "white", line_start, line_end, width=LINE_WIDTH)
+
+    
     
     
