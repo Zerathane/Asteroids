@@ -16,6 +16,8 @@ This project is a hands-on learning exercise in Python game development. The goa
 - Player-controlled spaceship
 - Asteroid field with moving objects
 - Shooting mechanics to destroy asteroids
+- Screen wrapping for the player ship and asteroids
+- A lives, score and waves system
 
 ## What I Learned
 
@@ -45,7 +47,6 @@ Developed on WSL2 — if running in a similar environment, an X server (e.g. XLa
 |-----|--------|
 | `W` | Thrust forward |
 | `A` | Rotate left |
-| `S` | Thrust backwards |
 | `D` | Rotate right |
 | `Space` | Shoot |
 
