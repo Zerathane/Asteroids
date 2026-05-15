@@ -5,6 +5,7 @@ class Game_State:
     def __init__(self):
         self.score = 0
         self.lives = PLAYER_LIVES
+        self.wave_number = 1
 
     def add_score(self, asteroid):
         if asteroid.radius > ASTEROID_MIN_RADIUS * 2:
@@ -24,3 +25,6 @@ class Game_State:
     def reset(self):
         self.score = 0
         self.lives = PLAYER_LIVES
+
+    def next_wave(self):
+        self.wave_number += 1

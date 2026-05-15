@@ -35,6 +35,7 @@ def main():
     player = Player(x, y)
     asteroid_field = AsteroidField()
     hud = Hud(game_state)
+    asteroid_field.spawn_wave(4)
 
     while True:
         log_state()
@@ -44,6 +45,9 @@ def main():
         screen.fill("black")
         updatable.update(dt)
         hud.draw(screen)
+        if len(asteroids) == 0:
+            game_state.next_wave()
+            asteroid_field.spawn_wave((game_state.wave_number + 3))
         for asteroid in asteroids:
             if player.collides_with(asteroid):
                 game_state.lose_life()

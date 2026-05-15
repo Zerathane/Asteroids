@@ -17,3 +17,7 @@ class Hud:
             x = 30 + i * 30
             y = 20
             draw_ship(screen, pygame.Vector2(x, y), 10, 180, "white")
+        wave_text = self.font.render(f"Wave: {str(self.game_state.wave_number)}", True, "white")
+        wave_rect = wave_text.get_rect()
+        wave_rect.topright = (SCREEN_WIDTH - 10, 10)
+        screen.blit(wave_text, wave_rect)

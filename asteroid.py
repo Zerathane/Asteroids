@@ -25,6 +25,7 @@ class Asteroid(CircleShape):
 
     def update(self, dt):
         self.position += (self.velocity * dt)
+        self.wrap(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     def split(self):
         if self.radius <= ASTEROID_MIN_RADIUS:
