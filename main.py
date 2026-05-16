@@ -48,7 +48,13 @@ def main():
         if len(asteroids) == 0:
             game_state.next_wave()
             asteroid_field.spawn_wave((game_state.wave_number + 3))
-        if not game_state.waiting:
+        if game_state.invulnerability_timer > 0:
+            if game_state.invulnerability_timer % 0.2 > 0.1:
+                drawable.remove(player)
+            else:
+                drawable.add(player)
+            game_state.invulnerability_timer -= dt
+        if not game_state.waiting and game_state.invulnerability_timer <= 0:
             for asteroid in asteroids:
                 if player.collides_with(asteroid):
                     game_state.lose_life()
@@ -74,6 +80,7 @@ def main():
                 drawable.add(player) 
                 updatable.add(player)   
                 game_state.waiting = False
+                game_state.invulnerability_timer = INVULNERABILITY_SECONDS
         for sprite in drawable:
             sprite.draw(screen)
         pygame.display.flip()
