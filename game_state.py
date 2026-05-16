@@ -1,11 +1,14 @@
 from constants import *
 from player import *
+from asteroidfield import *
+import pygame
 
 class Game_State:
     def __init__(self):
         self.score = 0
         self.lives = PLAYER_LIVES
         self.wave_number = 1
+        self.waiting = False
 
     def add_score(self, asteroid):
         if asteroid.radius > ASTEROID_MIN_RADIUS * 2:
@@ -28,3 +31,11 @@ class Game_State:
 
     def next_wave(self):
         self.wave_number += 1
+
+    def waiting_for_respawn(self, asteroids):
+        for asteroid in asteroids:
+            if asteroid.position.distance_to(pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)) < ASTEROID_SPAWN_DISTANCE_THRESHOLD:
+                return True
+        return False
+       
+        

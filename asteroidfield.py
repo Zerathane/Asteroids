@@ -1,3 +1,5 @@
+from turtle import position
+
 import pygame
 import random
 from asteroid import Asteroid
@@ -27,9 +29,10 @@ class AsteroidField(pygame.sprite.Sprite):
         ],
     ]
 
-    def __init__(self):
+    def __init__(self, player):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
+        self.player = player
 
     def spawn(self, radius, position, velocity):
         asteroid = Asteroid(position.x, position.y, radius)
@@ -43,6 +46,9 @@ class AsteroidField(pygame.sprite.Sprite):
             edge = random.choice(self.edges)
             speed = random.randint(60, 120)
             velocity = edge[0] * speed
-            velocity = velocity.rotate(random.randint(-30, 30))
-            position = edge[1](random.uniform(0, 1))
+            velocity = velocity.rotate(random.randint(-45, 45))
+            while True:
+                position = edge[1](random.uniform(0, 1))
+                if position.distance_to(self.player.position) > ASTEROID_SPAWN_DISTANCE_THRESHOLD:
+                    break
             self.spawn(ASTEROID_MAX_RADIUS, position, velocity)

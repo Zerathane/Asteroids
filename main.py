@@ -33,7 +33,7 @@ def main():
     Explosion.containers = (updatable, drawable)
     game_state = Game_State()
     player = Player(x, y)
-    asteroid_field = AsteroidField()
+    asteroid_field = AsteroidField(player)
     hud = Hud(game_state)
     asteroid_field.spawn_wave(4)
 
@@ -48,16 +48,19 @@ def main():
         if len(asteroids) == 0:
             game_state.next_wave()
             asteroid_field.spawn_wave((game_state.wave_number + 3))
-        for asteroid in asteroids:
-            if player.collides_with(asteroid):
-                game_state.lose_life()
-                log_event("player_hit")
-                if game_state.is_game_over():
-                    print("Game Over!")
-                    sys.exit()
-                    return
-                else:
-                    player.reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)       
+        if not game_state.waiting:
+            for asteroid in asteroids:
+                if player.collides_with(asteroid):
+                    game_state.lose_life()
+                    log_event("player_hit")
+                    if game_state.is_game_over():
+                        print("Game Over!")
+                        sys.exit()
+                        return
+                    else:
+                        game_state.waiting = True
+                        drawable.remove(player) 
+                        updatable.remove(player)   
         for asteroid in asteroids:
             for shot in shots:
                 if shot.collides_with(asteroid):
@@ -65,6 +68,12 @@ def main():
                     game_state.add_score(asteroid)
                     asteroid.split()
                     shot.kill()
+        if game_state.waiting:
+            if not game_state.waiting_for_respawn(asteroids):
+                player.reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                drawable.add(player) 
+                updatable.add(player)   
+                game_state.waiting = False
         for sprite in drawable:
             sprite.draw(screen)
         pygame.display.flip()
