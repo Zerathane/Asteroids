@@ -31,6 +31,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     Shot.containers = (shots, updatable, drawable)
     Explosion.containers = (updatable, drawable)
+    ShipExplosion.containers = (updatable, drawable)
     game_state = Game_State()
     player = Player(x, y)
     asteroid_field = AsteroidField(player)
@@ -59,6 +60,7 @@ def main():
                 if player.collides_with(asteroid):
                     game_state.lose_life()
                     log_event("player_hit")
+                    ShipExplosion(player.position.x, player.position.y)
                     if game_state.is_game_over():
                         print("Game Over!")
                         sys.exit()

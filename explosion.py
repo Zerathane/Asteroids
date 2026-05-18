@@ -1,3 +1,5 @@
+from symtable import Class
+
 import pygame
 from circleshape import *
 from constants import *
@@ -34,4 +36,40 @@ class Explosion(pygame.sprite.Sprite):
             offset_dot_positions.append(self.position + dot_position)
         for offset_dot_position in offset_dot_positions:
             pygame.draw.circle(screen, "white", offset_dot_position, 1)
-        
+
+class ShipExplosion(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        if hasattr(self, "containers"):
+            super().__init__(self.containers)
+        else:
+            super().__init__()
+        self.position = pygame.Vector2(x, y)
+        self.lifetime = SHIP_EXPLOSION_LIFETIME_SECONDS
+        self.radius = SHIP_EXPLOSION_RADIUS
+        self.dot_positions = []
+        self.dot_velocities = []
+        for i in range(SHIP_EXPLOSION_LINE_COUNT):
+            x_offset1 = random.uniform(-self.radius, self.radius)
+            x_offset2 = random.uniform(-self.radius, self.radius)
+            y_offset1 = random.uniform(-self.radius, self.radius)
+            y_offset2 = random.uniform(-self.radius, self.radius)
+            point_a = pygame.Vector2(x_offset1, y_offset1)
+            point_b = pygame.Vector2(x_offset2, y_offset2)
+            self.dot_positions.append((point_a, point_b))
+            velocity_a = point_a.normalize() * SHIP_EXPLOSION_SPEED
+            velocity_b = -velocity_a
+            self.dot_velocities.append((velocity_a, velocity_b))
+
+    def update(self, dt):
+        for i, ((position_a, position_b), (velocity_a, velocity_b)) in enumerate(zip(self.dot_positions, self.dot_velocities)):
+            self.dot_positions[i] = (position_a + velocity_a * dt, position_b + velocity_b * dt)
+        self.lifetime -= dt
+        if self.lifetime <= 0:
+            self.kill()
+
+    def draw(self, screen):
+        offset_dot_positions = []
+        for position_a, position_b in self.dot_positions:
+            offset_dot_positions.append((self.position + position_a, self.position + position_b))
+        for offset_position_a, offset_position_b in offset_dot_positions:
+            pygame.draw.line(screen, "white", offset_position_a, offset_position_b, 2)
