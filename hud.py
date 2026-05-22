@@ -21,3 +21,9 @@ class Hud:
         wave_rect = wave_text.get_rect()
         wave_rect.topright = (SCREEN_WIDTH - 10, 10)
         screen.blit(wave_text, wave_rect)
+
+    def draw_game_over(self, screen):
+        game_over_text = self.font.render("GAME OVER", True, "white")
+        game_over_rect = game_over_text.get_rect()
+        game_over_rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+        screen.blit(game_over_text, game_over_rect)

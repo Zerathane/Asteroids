@@ -10,6 +10,7 @@ class Game_State:
         self.wave_number = 1
         self.waiting = False
         self.invulnerability_timer = 0
+        self.game_over_timer = 0
 
     def add_score(self, asteroid):
         if asteroid.radius > ASTEROID_MIN_RADIUS * 2:

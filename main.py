@@ -55,16 +55,22 @@ def main():
             else:
                 drawable.add(player)
             game_state.invulnerability_timer -= dt
-        if not game_state.waiting and game_state.invulnerability_timer <= 0:
+        if game_state.game_over_timer > 0:
+            game_state.game_over_timer -= dt
+            hud.draw_game_over(screen)
+            if game_state.game_over_timer <= 0:
+                print("Game over!")
+                sys.exit()
+        if not game_state.waiting and game_state.invulnerability_timer <= 0 and game_state.game_over_timer <= 0:
             for asteroid in asteroids:
                 if player.collides_with(asteroid):
                     game_state.lose_life()
                     log_event("player_hit")
                     ShipExplosion(player.position.x, player.position.y)
                     if game_state.is_game_over():
-                        print("Game Over!")
-                        sys.exit()
-                        return
+                        game_state.game_over_timer = GAME_OVER_TIMER_SECONDS
+                        drawable.remove(player)
+                        updatable.remove(player)
                     else:
                         game_state.waiting = True
                         drawable.remove(player) 
