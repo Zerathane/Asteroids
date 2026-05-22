@@ -56,13 +56,14 @@ class ShipExplosion(pygame.sprite.Sprite):
             point_a = pygame.Vector2(x_offset1, y_offset1)
             point_b = pygame.Vector2(x_offset2, y_offset2)
             self.dot_positions.append((point_a, point_b))
-            velocity_a = point_a.normalize() * SHIP_EXPLOSION_SPEED
-            velocity_b = -velocity_a
-            self.dot_velocities.append((velocity_a, velocity_b))
+            midpoint = (point_a + point_b) / 2
+            velocity_a = midpoint.normalize() * SHIP_EXPLOSION_SPEED
+            
+            self.dot_velocities.append(velocity_a)
 
     def update(self, dt):
-        for i, ((position_a, position_b), (velocity_a, velocity_b)) in enumerate(zip(self.dot_positions, self.dot_velocities)):
-            self.dot_positions[i] = (position_a + velocity_a * dt, position_b + velocity_b * dt)
+        for i, ((position_a, position_b), velocity_a) in enumerate(zip(self.dot_positions, self.dot_velocities)):
+            self.dot_positions[i] = (position_a + velocity_a * dt, position_b + velocity_a * dt)
         self.lifetime -= dt
         if self.lifetime <= 0:
             self.kill()
