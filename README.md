@@ -48,6 +48,7 @@ Developed on WSL2 — if running in a similar environment, an X server (e.g. XLa
 | `W` | Thrust forward |
 | `A` | Rotate left |
 | `D` | Rotate right |
+| `E` | Hyperspace |
 | `Space` | Shoot |
 
 ## Acknowledgements
