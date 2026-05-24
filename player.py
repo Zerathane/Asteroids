@@ -1,3 +1,4 @@
+import random
 from constants import *
 from circleshape import *
 from shot import *
@@ -7,6 +8,7 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
+        self.hyperspace_cooldown = 0
 
     def draw(self, screen):
         keys = pygame.key.get_pressed()
@@ -30,7 +32,11 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
+        if keys[pygame.K_e]:
+            self.hyperspace()
+
         self.shot_cooldown -= dt
+        self.hyperspace_cooldown -= dt
         self.position += self.velocity * dt
         self.velocity *= PLAYER_DRAG
         self.wrap(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -55,6 +61,13 @@ class Player(CircleShape):
         self.velocity = pygame.Vector2(0, 0)
         self.rotation = 0
         self.shot_cooldown = 0
+        self.hyperspace_cooldown = 0
+    def hyperspace(self):
+        if self.hyperspace_cooldown > 0:
+            return
+        else:
+            self.hyperspace_cooldown = HYPERSPACE_COOLDOWN_SECONDS
+        self.position = pygame.Vector2(random.uniform(0, SCREEN_WIDTH), random.uniform(0, SCREEN_HEIGHT))
 
 def draw_ship(screen, position, radius, rotation, colour, thrusting=False):
     forward = pygame.Vector2(0, 1).rotate(rotation)
@@ -69,6 +82,8 @@ def draw_ship(screen, position, radius, rotation, colour, thrusting=False):
     keys = pygame.key.get_pressed()
     if thrusting:
         pygame.draw.line(screen, "white", line_start, line_end, width=LINE_WIDTH)
+
+
 
     
     
