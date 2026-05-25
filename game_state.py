@@ -13,12 +13,16 @@ class Game_State:
         self.game_over_timer = 0
 
     def add_score(self, asteroid):
+        pre_score = self.score // 10000
         if asteroid.radius > ASTEROID_MIN_RADIUS * 2:
             self.score += SCORE_LARGE_ASTEROID
         elif asteroid.radius > ASTEROID_MIN_RADIUS:
             self.score += SCORE_MEDIUM_ASTEROID
         else:
             self.score += SCORE_SMALL_ASTEROID
+        post_score = self.score // 10000
+        if post_score != pre_score:
+            self.add_life()
 
     
     def lose_life(self):
@@ -40,4 +44,5 @@ class Game_State:
                 return True
         return False
        
-        
+    def add_life(self):
+        self.lives += 1
