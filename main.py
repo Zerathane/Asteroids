@@ -40,6 +40,7 @@ def main():
     hud = Hud(game_state)
     asteroid_field.spawn_wave(4)
 
+    EnemyShip(640, 360, 20) # Add an enemy ship for testing purposes. Remove when done.
 
     while True:
         log_state()
