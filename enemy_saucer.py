@@ -4,10 +4,19 @@ from circleshape import CircleShape
 from constants import *
 
 class EnemySaucer(CircleShape):
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, size, side):
         super().__init__(x, y, radius)
-        self.velocity = pygame.Vector2((random.choice([ENEMY_SAUCER_SPEED, -ENEMY_SAUCER_SPEED])), 0)
+        self.size = size
+        self.side = side
+        if self.side == "left":
+            self.velocity = pygame.Vector2(ENEMY_SAUCER_SPEED, 0)
+        else:
+            self.velocity = pygame.Vector2(-ENEMY_SAUCER_SPEED, 0)       
         self.direction_change_timer = ENEMY_SAUCER_DIRECT_CHANGE_INTERVAL_SECONDS
+        if self.size == "small":
+            self.velocity = self.velocity.normalize() * ENEMY_SAUCER_SMALL_SPEED
+        else:
+            self.velocity = self.velocity.normalize() * ENEMY_SAUCER_SPEED
         self.lower_points = [
             pygame.Vector2(-1.5 * self.radius, 0),
             pygame.Vector2(1.5 * self.radius, 0),
@@ -45,7 +54,14 @@ class EnemySaucer(CircleShape):
 
     def update(self, dt):
         self.move(dt)
-        self.wrap(SCREEN_WIDTH, SCREEN_HEIGHT)
+        if self.position.y < 0:
+            self.position.y = SCREEN_HEIGHT
+        elif self.position.y > SCREEN_HEIGHT:
+            self.position.y = 0
+        if self.position.x < -ENEMY_SAUCER_LARGE_RADIUS * 2:
+            self.kill()
+        elif self.position.x > SCREEN_WIDTH + ENEMY_SAUCER_LARGE_RADIUS * 2:
+            self.kill()
 
     def draw(self, screen):
         lower_offset_points = []

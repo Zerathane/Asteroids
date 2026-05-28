@@ -10,6 +10,7 @@ from asteroidfield import AsteroidField
 from game_state import Game_State
 import sys
 from enemy_saucer import EnemySaucer
+from saucer_manager import SaucerManager
 
 def main():
     version = pygame.version.ver
@@ -27,21 +28,23 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    saucers = pygame.sprite.Group()
     AsteroidField.containers = (updatable)
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     Shot.containers = (shots, updatable, drawable)
     Explosion.containers = (updatable, drawable)
     ShipExplosion.containers = (updatable, drawable)
-    EnemySaucer.containers = (updatable, drawable)
+    EnemySaucer.containers = (updatable, drawable, saucers)
+    SaucerManager.containers = (updatable)
     game_state = Game_State()
     player = Player(x, y)
     asteroid_field = AsteroidField(player)
     hud = Hud(game_state)
+    saucer_manager = SaucerManager(game_state, saucers)
     asteroid_field.spawn_wave(4)
 
-    EnemySaucer(640, 360, 20) # Add an enemy saucer for testing purposes. Remove when done.
-
+    
     while True:
         log_state()
         for event in pygame.event.get():
