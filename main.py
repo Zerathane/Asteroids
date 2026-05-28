@@ -9,7 +9,7 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from game_state import Game_State
 import sys
-from enemy_ship import EnemyShip
+from enemy_saucer import EnemySaucer
 
 def main():
     version = pygame.version.ver
@@ -33,14 +33,14 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     Explosion.containers = (updatable, drawable)
     ShipExplosion.containers = (updatable, drawable)
-    EnemyShip.containers = (updatable, drawable)
+    EnemySaucer.containers = (updatable, drawable)
     game_state = Game_State()
     player = Player(x, y)
     asteroid_field = AsteroidField(player)
     hud = Hud(game_state)
     asteroid_field.spawn_wave(4)
 
-    EnemyShip(640, 360, 20) # Add an enemy ship for testing purposes. Remove when done.
+    EnemySaucer(640, 360, 20) # Add an enemy saucer for testing purposes. Remove when done.
 
     while True:
         log_state()

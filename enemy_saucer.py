@@ -1,10 +1,13 @@
+import random
 import pygame
 from circleshape import CircleShape
 from constants import *
 
-class EnemyShip(CircleShape):
+class EnemySaucer(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
+        self.velocity = pygame.Vector2((random.choice([ENEMY_SAUCER_SPEED, -ENEMY_SAUCER_SPEED])), 0)
+        self.direction_change_timer = ENEMY_SAUCER_DIRECT_CHANGE_INTERVAL_SECONDS
         self.lower_points = [
             pygame.Vector2(-1.5 * self.radius, 0),
             pygame.Vector2(1.5 * self.radius, 0),
@@ -31,8 +34,18 @@ class EnemyShip(CircleShape):
         ]
         
 
-    def move(self):
-        pass
+    def move(self, dt):
+        self.position += self.velocity * dt
+        self.direction_change_timer -= dt
+        if self.direction_change_timer <= 0:
+            self.direction_change_timer = ENEMY_SAUCER_DIRECT_CHANGE_INTERVAL_SECONDS
+            self.velocity.y = random.uniform(-ENEMY_SAUCER_SPEED, ENEMY_SAUCER_SPEED)
+
+
+
+    def update(self, dt):
+        self.move(dt)
+        self.wrap(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     def draw(self, screen):
         lower_offset_points = []
