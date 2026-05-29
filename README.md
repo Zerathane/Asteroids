@@ -18,6 +18,7 @@ This project is a hands-on learning exercise in Python game development. The goa
 - Shooting mechanics to destroy asteroids
 - Screen wrapping for the player ship and asteroids
 - A lives, score and waves system
+- Two sizes of enemy ship will spawn at intervals and depending on wave number
 
 ## What I Learned
 
