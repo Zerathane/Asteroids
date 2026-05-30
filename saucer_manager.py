@@ -4,12 +4,13 @@ from game_state import *
 from enemy_saucer import EnemySaucer
 
 class SaucerManager(pygame.sprite.Sprite):
-    def __init__(self, game_state, saucers):
+    def __init__(self, game_state, saucers, player):
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.spawn_timer = 0.0
         self.game_state = game_state
         self.spawn_timer = ENEMY_SAUCER_SPAWN_RATE_SECONDS
         self.saucers = saucers
+        self.player = player
         
 
     def update(self, dt):
@@ -24,6 +25,6 @@ class SaucerManager(pygame.sprite.Sprite):
                 spawn_y = random.uniform(0, SCREEN_HEIGHT)
                 self.spawn_timer = ENEMY_SAUCER_SPAWN_RATE_SECONDS
                 if self.game_state.wave_number <3:
-                    EnemySaucer(spawn_x, spawn_y, ENEMY_SAUCER_LARGE_RADIUS, "large", side)
+                    EnemySaucer(spawn_x, spawn_y, ENEMY_SAUCER_LARGE_RADIUS, "large", side, self.player)
                 else:
-                    EnemySaucer(spawn_x, spawn_y, ENEMY_SAUCER_SMALL_RADIUS, "small", side)
+                    EnemySaucer(spawn_x, spawn_y, ENEMY_SAUCER_SMALL_RADIUS, "small", side, self.player)

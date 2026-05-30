@@ -16,4 +16,5 @@ class Shot(CircleShape):
             self.kill()
         self.wrap(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    
+class SaucerShot(Shot):
+    pass

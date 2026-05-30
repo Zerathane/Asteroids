@@ -1,7 +1,7 @@
 import pygame
 from explosion import *
 from hud import Hud
-from shot import Shot
+from shot import SaucerShot, Shot
 from player import Player
 from constants import *
 from logger import *
@@ -28,6 +28,7 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    saucer_shots = pygame.sprite.Group()
     saucers = pygame.sprite.Group()
     AsteroidField.containers = (updatable)
     Player.containers = (updatable, drawable)
@@ -37,11 +38,12 @@ def main():
     ShipExplosion.containers = (updatable, drawable)
     EnemySaucer.containers = (updatable, drawable, saucers)
     SaucerManager.containers = (updatable)
+    SaucerShot.containers = (saucer_shots, updatable, drawable)
     game_state = Game_State()
     player = Player(x, y)
     asteroid_field = AsteroidField(player)
     hud = Hud(game_state)
-    saucer_manager = SaucerManager(game_state, saucers)
+    saucer_manager = SaucerManager(game_state, saucers, player)
     asteroid_field.spawn_wave(4)
 
     

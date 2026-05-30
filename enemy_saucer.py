@@ -2,12 +2,15 @@ import random
 import pygame
 from circleshape import CircleShape
 from constants import *
+from shot import SaucerShot
 
 class EnemySaucer(CircleShape):
-    def __init__(self, x, y, radius, size, side):
+    def __init__(self, x, y, radius, size, side, player):
         super().__init__(x, y, radius)
+        self.shot_cooldown = SAUCER_SHOT_COOLDOWN_SECONDS
         self.size = size
         self.side = side
+        self.player = player
         if self.side == "left":
             self.velocity = pygame.Vector2(ENEMY_SAUCER_SPEED, 0)
         else:
@@ -62,6 +65,16 @@ class EnemySaucer(CircleShape):
             self.kill()
         elif self.position.x > SCREEN_WIDTH + ENEMY_SAUCER_LARGE_RADIUS * 2:
             self.kill()
+        self.shot_cooldown -= dt
+        if self.shot_cooldown <= 0:
+            if self.size == "large":
+                self.shoot_random()
+                self.shot_cooldown = SAUCER_SHOT_COOLDOWN_SECONDS
+            else:
+                self.shoot_at_player(self.player)
+                self.shot_cooldown = SAUCER_SHOT_COOLDOWN_SECONDS
+
+        
 
     def draw(self, screen):
         lower_offset_points = []
@@ -80,4 +93,14 @@ class EnemySaucer(CircleShape):
         for point in self.dome_points:
             dome_offset_points.append(self.position + point)
         pygame.draw.polygon(screen, "white", dome_offset_points, width=LINE_WIDTH)
+
+    def shoot_random(self):
+        velocity = pygame.Vector2(1, 0).rotate(random.uniform(0, 360)).normalize() * SAUCER_SHOOT_SPEED
+        SaucerShot(self.position.x, self.position.y, SHOT_RADIUS).velocity = velocity
+        
+    def shoot_at_player(self, player):
+        direction = (player.position - self.position).normalize()
+        velocity = direction * SAUCER_SHOOT_SPEED
+        SaucerShot(self.position.x, self.position.y, SHOT_RADIUS).velocity = velocity
+
 
