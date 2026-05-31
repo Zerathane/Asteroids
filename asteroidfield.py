@@ -44,7 +44,7 @@ class AsteroidField(pygame.sprite.Sprite):
     def spawn_wave(self, wave_number):
         for _ in range(wave_number):
             edge = random.choice(self.edges)
-            speed = random.randint(60, 120)
+            speed = random.randint(50, 110)
             velocity = edge[0] * speed
             velocity = velocity.rotate(random.randint(-45, 45))
             while True:

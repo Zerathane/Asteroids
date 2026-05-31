@@ -46,3 +46,13 @@ class Game_State:
        
     def add_life(self):
         self.lives += 1
+
+    def add_saucer_score(self, saucer):
+        pre_score = self.score // 10000
+        if saucer.size == "large":
+            self.score += SCORE_LARGE_SAUCER
+        else:
+            self.score += SCORE_SMALL_SAUCER
+        post_score = self.score // 10000
+        if post_score != pre_score:
+            self.add_life()

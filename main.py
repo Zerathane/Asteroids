@@ -91,6 +91,44 @@ def main():
                     game_state.add_score(asteroid)
                     asteroid.split()
                     shot.kill()
+        for saucer in saucers:
+            for shot in shots:
+                if shot.collides_with(saucer):
+                    log_event("saucer_shot")
+                    game_state.add_saucer_score(saucer)
+                    saucer.kill()
+                    shot.kill()
+                    ShipExplosion(saucer.position.x, saucer.position.y)
+        if not game_state.waiting and game_state.invulnerability_timer <= 0 and game_state.game_over_timer <= 0:
+            for saucer_shot in saucer_shots:
+                if player.collides_with(saucer_shot):
+                    game_state.lose_life()
+                    log_event("player_hit_by_saucer")
+                    ShipExplosion(player.position.x, player.position.y)
+                    saucer_shot.kill()
+                    if game_state.is_game_over():
+                        game_state.game_over_timer = GAME_OVER_TIMER_SECONDS
+                        drawable.remove(player)
+                        updatable.remove(player)
+                    else:
+                        game_state.waiting = True
+                        drawable.remove(player) 
+                        updatable.remove(player)
+        if not game_state.waiting and game_state.invulnerability_timer <= 0 and game_state.game_over_timer <= 0:
+            for saucer in saucers:
+                if player.collides_with(saucer):
+                    game_state.lose_life()
+                    log_event("player_hit_by_saucer")
+                    ShipExplosion(player.position.x, player.position.y)
+                    saucer.kill()
+                    if game_state.is_game_over():
+                        game_state.game_over_timer = GAME_OVER_TIMER_SECONDS
+                        drawable.remove(player)
+                        updatable.remove(player)
+                    else:
+                        game_state.waiting = True
+                        drawable.remove(player) 
+                        updatable.remove(player)
         if game_state.waiting:
             if not game_state.waiting_for_respawn(asteroids):
                 player.reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
