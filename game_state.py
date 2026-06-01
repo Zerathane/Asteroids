@@ -56,3 +56,6 @@ class Game_State:
         post_score = self.score // 10000
         if post_score != pre_score:
             self.add_life()
+
+    def player_is_vulnerable(self):
+        return self.invulnerability_timer <= 0 and self.game_over_timer <= 0 and not self.waiting
