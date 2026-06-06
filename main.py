@@ -93,7 +93,7 @@ def draw(screen, drawable, hud, game_state):
 def manage_wave(asteroids, game_state, asteroid_field):
     if len(asteroids) == 0:
         game_state.next_wave()
-        asteroid_field.spawn_wave((game_state.wave_number + 3))
+        asteroid_field.spawn_wave(min((game_state.wave_number + 3), 11))
 
 def main():
     version = pygame.version.ver
