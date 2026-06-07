@@ -11,6 +11,7 @@ from game_state import Game_State
 import sys
 from enemy_saucer import EnemySaucer
 from saucer_manager import SaucerManager
+from menu import Menu
 
 def handle_player_death(game_state, player, drawable, updatable):
     game_state.lose_life()
@@ -55,8 +56,8 @@ def handle_collisions(game_state, player, asteroids, shots, saucers, saucer_shot
                     saucer.kill()
                     break
         
-def handle_events():
-    for event in pygame.event.get():
+def handle_events(events):
+    for event in events:
         if event.type == pygame.QUIT:
             return False
     return True
@@ -129,10 +130,10 @@ def main():
     saucer_manager = SaucerManager(game_state, saucers, player)
     asteroid_field.spawn_wave(4)
 
-    
     while True:
+        events = pygame.event.get()
         log_state()
-        if not handle_events():
+        if not handle_events(events):
             break 
         updatable.update(dt)
         manage_wave(asteroids, game_state, asteroid_field)
