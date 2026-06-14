@@ -129,17 +129,35 @@ def main():
     hud = Hud(game_state)
     saucer_manager = SaucerManager(game_state, saucers, player)
     asteroid_field.spawn_wave(4)
+    current_state = AppState.MAIN_MENU
+    menu = Menu()
 
     while True:
         events = pygame.event.get()
         log_state()
         if not handle_events(events):
             break 
-        updatable.update(dt)
-        manage_wave(asteroids, game_state, asteroid_field)
-        handle_collisions(game_state, player, asteroids, shots, saucers, saucer_shots, updatable, drawable)
-        handle_game_state(game_state, updatable, drawable, player, hud, asteroids, dt, screen) 
-        draw(screen, drawable, hud, game_state)  
+
+        if current_state == AppState.MAIN_MENU:
+            selection = menu.update(events, dt)
+            if selection == "play":
+                current_state = AppState.PLAYING
+            elif selection == "leaderboard":
+                current_state = AppState.LEADERBOARD
+            elif selection == "help":
+                current_state = AppState.HELP
+            elif selection == "quit":
+                break
+            screen.fill("black")
+            menu.draw(screen)
+            pygame.display.flip()
+
+        elif current_state == AppState.PLAYING:
+            updatable.update(dt)
+            manage_wave(asteroids, game_state, asteroid_field)
+            handle_collisions(game_state, player, asteroids, shots, saucers, saucer_shots, updatable, drawable)
+            handle_game_state(game_state, updatable, drawable, player, hud, asteroids, dt, screen) 
+            draw(screen, drawable, hud, game_state)  
         dt = clock.tick(60) / 1000
         
 if __name__ == "__main__":

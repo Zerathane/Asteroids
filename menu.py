@@ -8,6 +8,7 @@ class Menu:
         self.selected_index = 0
         self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 24)
         self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 48)
+        self.transition_timer = 0
         
     def draw(self, screen):
         # Draw title
@@ -28,7 +29,7 @@ class Menu:
 
 
         
-    def update(self, events):
+    def update(self, events, dt):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
@@ -36,4 +37,11 @@ class Menu:
                 elif event.key == pygame.K_s:
                     self.selected_index = (self.selected_index + 1) % len(self.options)
                 elif event.key == pygame.K_RETURN:
-                    return self.menu_options[self.selected_index]
+                    if self.menu_options[self.selected_index] == "play":
+                        self.transition_timer = 0.5
+                    else:
+                        return self.menu_options[self.selected_index]
+        if self.transition_timer > 0:
+            self.transition_timer -= dt
+            if self.transition_timer <= 0:
+                return self.menu_options[self.selected_index]
