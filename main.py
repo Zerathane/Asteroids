@@ -13,6 +13,19 @@ from enemy_saucer import EnemySaucer
 from saucer_manager import SaucerManager
 from menu import Menu
 
+def reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field):
+    asteroids.empty()
+    shots.empty()
+    saucers.empty()
+    saucer_shots.empty()
+    updatable.empty()
+    drawable.empty()
+    game_state.reset()
+    player.reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    updatable.add(player)
+    drawable.add(player)
+    asteroid_field.spawn_wave(4)
+
 def handle_player_death(game_state, player, drawable, updatable):
     game_state.lose_life()
     log_event("player_hit")
@@ -80,7 +93,7 @@ def handle_game_state(game_state, updatable, drawable, player, hud, asteroids, d
         game_state.game_over_timer -= dt
         if game_state.game_over_timer <= 0:
             print("Game over!")
-            sys.exit()
+            return AppState.MAIN_MENU
 
 def draw(screen, drawable, hud, game_state):
     screen.fill("black")
@@ -142,6 +155,7 @@ def main():
             selection = menu.update(events, dt)
             if selection == "play":
                 current_state = AppState.PLAYING
+                reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field)
             elif selection == "leaderboard":
                 current_state = AppState.LEADERBOARD
             elif selection == "help":
@@ -156,7 +170,9 @@ def main():
             updatable.update(dt)
             manage_wave(asteroids, game_state, asteroid_field)
             handle_collisions(game_state, player, asteroids, shots, saucers, saucer_shots, updatable, drawable)
-            handle_game_state(game_state, updatable, drawable, player, hud, asteroids, dt, screen) 
+            new_state = handle_game_state(game_state, updatable, drawable, player, hud, asteroids, dt, screen)
+            if new_state is not None:
+                current_state = new_state
             draw(screen, drawable, hud, game_state)  
         dt = clock.tick(60) / 1000
         
