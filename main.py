@@ -1,5 +1,6 @@
 import pygame
 from explosion import *
+from help import Help
 from hud import *
 from shot import SaucerShot, Shot
 from player import Player
@@ -144,6 +145,8 @@ def main():
     asteroid_field.spawn_wave(4)
     current_state = AppState.MAIN_MENU
     menu = Menu()
+    help_screen = Help()
+
 
     while True:
         events = pygame.event.get()
@@ -174,6 +177,14 @@ def main():
             if new_state is not None:
                 current_state = new_state
             draw(screen, drawable, hud, game_state)  
+
+        elif current_state == AppState.HELP:
+            new_state = help_screen.update(events)
+            if new_state is not None:
+                current_state = new_state
+            help_screen.draw(screen)
+            pygame.display.flip()
+
         dt = clock.tick(60) / 1000
         
 if __name__ == "__main__":
