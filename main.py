@@ -13,6 +13,31 @@ import sys
 from enemy_saucer import EnemySaucer
 from saucer_manager import SaucerManager
 from menu import Menu
+from leaderboard import *
+
+
+## Dummy data for rendering the leaderboard
+
+dummy_leaderboard_data = [
+    {"name": "AAA", "score": 5000, "wave": 1},
+    {"name": "BBB", "score": 4000, "wave": 2},
+    {"name": "CCC", "score": 3000, "wave": 3},
+    {"name": "DDD", "score": 2000, "wave": 4},
+    {"name": "EEE", "score": 1000, "wave": 5},
+    {"name": "FFF", "score": 900, "wave": 6},
+    {"name": "GGG", "score": 800, "wave": 7},
+    {"name": "HHH", "score": 700, "wave": 8},
+    {"name": "III", "score": 600, "wave": 9},
+    {"name": "JJJ", "score": 500, "wave": 10}
+]
+
+class DummyGameState:
+    def __init__(self):
+        self.score = 0
+        self.wave_number = 1
+
+## delete above when leaderboard is fully implemented
+
 
 def reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field):
     asteroids.empty()
@@ -146,6 +171,7 @@ def main():
     current_state = AppState.MAIN_MENU
     menu = Menu()
     help_screen = Help()
+    leaderboard = Leaderboard(DummyGameState(), dummy_leaderboard_data)
 
 
     while True:
@@ -183,6 +209,13 @@ def main():
             if new_state is not None:
                 current_state = new_state
             help_screen.draw(screen)
+            pygame.display.flip()
+
+        elif current_state == AppState.LEADERBOARD:
+            new_state = leaderboard.update(events)
+            if new_state is not None:
+                current_state = new_state
+            leaderboard.draw(screen)
             pygame.display.flip()
 
         dt = clock.tick(60) / 1000
