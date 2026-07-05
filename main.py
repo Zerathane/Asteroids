@@ -16,30 +16,7 @@ from menu import Menu
 from leaderboard import *
 
 
-## Dummy data for rendering the leaderboard
-
-dummy_leaderboard_data = [
-    {"name": "AAA", "score": 5000, "wave": 1},
-    {"name": "BBB", "score": 4000, "wave": 2},
-    {"name": "CCC", "score": 3000, "wave": 3},
-    {"name": "DDD", "score": 2000, "wave": 4},
-    {"name": "EEE", "score": 1000, "wave": 5},
-    {"name": "FFF", "score": 900, "wave": 6},
-    {"name": "GGG", "score": 800, "wave": 7},
-    {"name": "HHH", "score": 700, "wave": 8},
-    {"name": "III", "score": 600, "wave": 9},
-    {"name": "JJJ", "score": 500, "wave": 10}
-]
-
-class DummyGameState:
-    def __init__(self):
-        self.score = 0
-        self.wave_number = 1
-
-## delete above when leaderboard is fully implemented
-
-
-def reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field):
+def reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field, saucer_manager):
     asteroids.empty()
     shots.empty()
     saucers.empty()
@@ -48,9 +25,10 @@ def reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, gam
     drawable.empty()
     game_state.reset()
     player.reset(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    updatable.add(player)
+    updatable.add(player, saucer_manager)
     drawable.add(player)
     asteroid_field.spawn_wave(4)
+    saucer_manager.reset()
 
 def handle_player_death(game_state, player, drawable, updatable):
     game_state.lose_life()
@@ -119,7 +97,7 @@ def handle_game_state(game_state, updatable, drawable, player, hud, asteroids, d
         game_state.game_over_timer -= dt
         if game_state.game_over_timer <= 0:
             print("Game over!")
-            return AppState.MAIN_MENU
+            return AppState.LEADERBOARD
 
 def draw(screen, drawable, hud, game_state):
     screen.fill("black")
@@ -171,8 +149,7 @@ def main():
     current_state = AppState.MAIN_MENU
     menu = Menu()
     help_screen = Help()
-    leaderboard = Leaderboard(DummyGameState(), dummy_leaderboard_data)
-
+    leaderboard_manager = LeaderboardManager()
 
     while True:
         events = pygame.event.get()
@@ -184,9 +161,10 @@ def main():
             selection = menu.update(events, dt)
             if selection == "play":
                 current_state = AppState.PLAYING
-                reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field)
+                reset_game(asteroids, shots, saucers, saucer_shots, updatable, drawable, game_state, player, asteroid_field, saucer_manager)
             elif selection == "leaderboard":
                 current_state = AppState.LEADERBOARD
+                leaderboard = Leaderboard(0, 0, leaderboard_manager)
             elif selection == "help":
                 current_state = AppState.HELP
             elif selection == "quit":
@@ -202,6 +180,8 @@ def main():
             new_state = handle_game_state(game_state, updatable, drawable, player, hud, asteroids, dt, screen)
             if new_state is not None:
                 current_state = new_state
+                if current_state == AppState.LEADERBOARD:
+                    leaderboard = Leaderboard(game_state.score, game_state.wave_number, leaderboard_manager)
             draw(screen, drawable, hud, game_state)  
 
         elif current_state == AppState.HELP:
@@ -212,7 +192,7 @@ def main():
             pygame.display.flip()
 
         elif current_state == AppState.LEADERBOARD:
-            new_state = leaderboard.update(events)
+            new_state = leaderboard.update(events, dt)
             if new_state is not None:
                 current_state = new_state
             leaderboard.draw(screen)

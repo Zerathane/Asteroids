@@ -28,3 +28,6 @@ class SaucerManager(pygame.sprite.Sprite):
                     EnemySaucer(spawn_x, spawn_y, ENEMY_SAUCER_LARGE_RADIUS, "large", side, self.player)
                 else:
                     EnemySaucer(spawn_x, spawn_y, ENEMY_SAUCER_SMALL_RADIUS, "small", side, self.player)
+
+    def reset(self):
+        self.spawn_timer = ENEMY_SAUCER_SPAWN_RATE_SECONDS

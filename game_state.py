@@ -35,6 +35,7 @@ class Game_State:
     def reset(self):
         self.score = 0
         self.lives = PLAYER_LIVES
+        self.wave_number = 1
 
     def next_wave(self):
         self.wave_number += 1
