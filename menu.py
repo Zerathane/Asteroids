@@ -7,11 +7,11 @@ class Menu:
         self.options = self.menu_options
         self.selected_index = 0
         self.font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 24)
+        self.footer_font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 16)
         self.font_title = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 48)
         self.transition_timer = 0
         
     def draw(self, screen):
-        # Draw title
         title_surface = self.font_title.render("ASTEROIDS", True, "white")
         screen.blit(title_surface, (SCREEN_WIDTH / 2 - title_surface.get_width() / 2, SCREEN_HEIGHT / 8 - title_surface.get_height() / 2))
 
@@ -26,9 +26,10 @@ class Menu:
             else:
                 text_surface = self.font.render(option.upper(), True, "white")
                 screen.blit(text_surface, (SCREEN_WIDTH / 2 - text_surface.get_width() / 2, y + 2))
-
-
         
+        footer_surface = self.footer_font.render("Created by Zerathane", True, "white")
+        screen.blit(footer_surface, (SCREEN_WIDTH / 2 - footer_surface.get_width() / 2, SCREEN_HEIGHT - footer_surface.get_height() - 10))
+
     def update(self, events, dt):
         for event in events:
             if event.type == pygame.KEYDOWN:
