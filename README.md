@@ -19,6 +19,7 @@ This project is a hands-on learning exercise in Python game development. The goa
 - Screen wrapping for the player ship and asteroids
 - A lives, score and waves system
 - Two sizes of enemy ship will spawn at intervals and depending on wave number
+- A readable and writable leaderboard feature upon achieving a qualifying score
 
 ## What I Learned
 
@@ -28,6 +29,7 @@ This project was primarily a learning exercise, covering:
 - **Object-oriented design** — modelling game entities (ship, asteroids, bullets) as classes with their own state and behaviour
 - **Collision detection** — identifying when game objects interact
 - **Pygame fundamentals** — display setup, event handling, sprite groups, and frame timing
+- **JSON file persistence** — Creating, reading and writng to a leaderboard.json file 
 
 ## Running the Game
 
